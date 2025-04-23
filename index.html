@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>你是哪一種語氣靈魂？</title>
+  <style>
+    body {
+      font-family: "Helvetica Neue", sans-serif;
+      background: #fefefe;
+      padding: 2rem;
+      max-width: 700px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+    }
+    .question {
+      margin: 1.5rem 0;
+    }
+    .question-title {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    button {
+      display: block;
+      margin: 0.5rem 0;
+      padding: 0.6rem 1rem;
+      width: 100%;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      background: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #e6f7ff;
+    }
+    .result {
+      display: none;
+      margin-top: 2rem;
+      padding: 1rem;
+      border: 2px dashed #aaa;
+      border-radius: 1rem;
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <h1>你是哪一種語氣靈魂？</h1>
+
+  <div id="quiz"></div>
+
+  <div class="result" id="resultBox">
+    <h2 id="resultTitle"></h2>
+    <p id="resultDesc"></p>
+    <div style="text-align:center;margin-top:20px;">
+      <p>👇 試試看其他語氣玩法</p>
+      <a href="https://your-ad-link.com" target="_blank">
+        <img src="https://your-cdn.com/ad-banner.jpg" width="250" alt="廣告">
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        title: "朋友向你求助時，你最有可能怎麼回應？",
+        options: ["Healing", "Tsundere", "Apathetic", "Professional"]
+      },
+      {
+        title: "假日你最喜歡怎麼安排？",
+        options: ["Apathetic", "Chaotic", "Professional", "Healing"]
+      },
+      {
+        title: "朋友開你玩笑，你會？",
+        options: ["Tsundere", "Shapeshifter", "Healing", "Apathetic"]
+      },
+      {
+        title: "當你喜歡一個人時，你通常…",
+        options: ["Healing", "Tsundere", "Professional", "Shapeshifter"]
+      },
+      {
+        title: "遇到小組討論，大家沒共識時你會？",
+        options: ["Healing", "Tsundere", "Professional", "Chaotic"]
+      },
+      {
+        title: "你最想擁有哪一種能力？",
+        options: ["Healing", "Tsundere", "Apathetic", "Shapeshifter"]
+      },
+      {
+        title: "被誤會時，你會？",
+        options: ["Healing", "Tsundere", "Apathetic", "Chaotic"]
+      }
+    ];
+
+    const resultProfiles = {
+      Healing: {
+        title: "【療癒型 Healing】",
+        desc: "你是溫柔靈魂的化身🌸總是在別人最需要時默默出現，用語氣安撫一切混亂與焦躁。"
+      },
+      Tsundere: {
+        title: "【傲嬌型 Tsundere】",
+        desc: "你的話語常帶刺，但關心藏在字裡行間，別人懂你就知道你多可愛！"
+      },
+      Apathetic: {
+        title: "【冷淡型 Apathetic】",
+        desc: "你語氣超淡定，常讓人捉摸不定，但你就是酷、有自己的步調。"
+      },
+      Professional: {
+        title: "【專業型 Professional】",
+        desc: "你的語氣總是精準分析，條理清晰，是隊伍中的解方擔當！"
+      },
+      Shapeshifter: {
+        title: "【百變型 Shapeshifter】",
+        desc: "你語氣多變，隨心而動，令人驚喜也讓人摸不透～"
+      },
+      Chaotic: {
+        title: "【混亂型 Chaotic】",
+        desc: "你說話跳Tone超大，總是帶來歡樂跟混亂，是氣氛製造機！"
+      }
+    };
+
+    const scores = { Healing: 0, Tsundere: 0, Apathetic: 0, Professional: 0, Shapeshifter: 0, Chaotic: 0 };
+    const quizBox = document.getElementById("quiz");
+
+    let currentQ = 0;
+
+    function renderQuestion() {
+      const q = questions[currentQ];
+      const div = document.createElement("div");
+      div.className = "question";
+      div.innerHTML = `<div class="question-title">第${currentQ + 1}題｜${q.title}</div>`;
+      q.options.forEach((type, idx) => {
+        const btn = document.createElement("button");
+        btn.textContent = q.options[idx];
+        btn.onclick = () => {
+          scores[type]++;
+          currentQ++;
+          quizBox.innerHTML = "";
+          if (currentQ < questions.length) {
+            renderQuestion();
+          } else {
+            showResult();
+          }
+        };
+        div.appendChild(btn);
+      });
+      quizBox.appendChild(div);
+    }
+
+    function showResult() {
+      const resultBox = document.getElementById("resultBox");
+      const resultTitle = document.getElementById("resultTitle");
+      const resultDesc = document.getElementById("resultDesc");
+
+      const maxType = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+      resultTitle.textContent = resultProfiles[maxType].title;
+      resultDesc.textContent = resultProfiles[maxType].desc;
+
+      resultBox.style.display = "block";
+    }
+
+    renderQuestion();
+  </script>
+</body>
+</html>
